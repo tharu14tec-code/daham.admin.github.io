@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daham Enterprises | Premium Admin Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col md:flex-row">
+
+    <aside class="w-full md:w-64 bg-white dark:bg-slate-800 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700 p-6 flex flex-col gap-6 shrink-0">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white text-xl font-bold">🤖</div>
+            <div>
+                <h1 class="font-extrabold text-sm tracking-wider text-indigo-600 dark:text-indigo-400">ZENCONTROL</h1>
+                <p class="text-xs text-slate-400 font-medium">Daham Enterprises</p>
+            </div>
+        </div>
+
+        <nav class="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible py-2 md:py-0 border-t border-b md:border-none border-slate-100 dark:border-slate-700">
+            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold transition bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400 whitespace-nowrap">
+                📊 Dashboard Stats
+            </button>
+            <button onclick="switchTab('categories')" id="btn-categories" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold transition text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 whitespace-nowrap">
+                ⛩️ Categories
+            </button>
+            <button onclick="switchTab('products')" id="btn-products" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold transition text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 whitespace-nowrap">
+                🛠️ Products Inventory
+            </button>
+        </nav>
+
+        <div class="mt-auto hidden md:block">
+            <button id="theme-btn" class="w-full py-2.5 bg-slate-100 dark:bg-slate-700 rounded-full text-xs font-bold flex items-center justify-center gap-2">🌓 Toggle Theme</button>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-4 md:p-10 max-w-7xl mx-auto w-full overflow-hidden">
+        
+        <section id="tab-dashboard" class="tab-content active space-y-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold">Control Center Overview</h2>
+                    <p class="text-xs text-slate-400 mt-1">Real-time web statistics and dynamic controls</p>
+                </div>
+                <div class="px-4 py-2 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold rounded-full flex items-center gap-2">
+                    <span class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span> Live Connected to Firestore
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
+                    <span class="text-2xl md:text-3xl">👥</span>
+                    <div class="mt-4">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Visitors</h4>
+                        <p id="stat-visitors" class="text-xl md:text-3xl font-black mt-1 text-indigo-600 dark:text-indigo-400">0</p>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
+                    <span class="text-2xl md:text-3xl">🗂️</span>
+                    <div class="mt-4">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Categories</h4>
+                        <p id="stat-categories" class="text-xl md:text-3xl font-black mt-1">0</p>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
+                    <span class="text-2xl md:text-3xl">📦</span>
+                    <div class="mt-4">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Products</h4>
+                        <p id="stat-products" class="text-xl md:text-3xl font-black mt-1">0</p>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
+                    <span class="text-2xl md:text-3xl">⚠️</span>
+                    <div class="mt-4">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Out of Stock</h4>
+                        <p id="stat-stockout" class="text-xl md:text-3xl font-black mt-1 text-rose-500">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 bg-indigo-50/50 dark:bg-slate-800/50 border border-indigo-100 dark:border-slate-700 rounded-[2rem] text-xs leading-relaxed space-y-2">
+                <p class="font-bold text-indigo-600 dark:text-indigo-400 text-sm">💡 Admin Panel Instructions</p>
+                <p>1. **Categories Configuration:** Add your primary divisions here first (e.g. `cupboards`, `doorswindows`). The system will use these slugs to tie everything cleanly together.</p>
+                <p>2. **Image Auto-Hosting:** When creating a new product specification, choose any high-resolution capture. The integrated **ImgBB API** automatically handles optimization and secure hosting natively.</p>
+            </div>
+        </section>
+
+        <section id="tab-categories" class="tab-content space-y-8">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-extrabold">Dynamic Category Setup</h2>
+                <p class="text-xs text-slate-400 mt-1">Add, update, or remove navigational filter divisions</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 h-fit">
+                    <h3 class="font-bold text-base mb-6">Create / Modify Division</h3>
+                    <form id="category-form" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-2">Category Unique ID (Slug)</label>
+                            <input type="text" id="cat-id" required class="w-full px-4 py-3 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="e.g., cupboards">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-2">English Display Name</label>
+                            <input type="text" id="cat-name-en" required class="w-full px-4 py-3 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="e.g., Luxury Cupboards">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-2">Sinhala Display Name (සිංහල නම)</label>
+                            <input type="text" id="cat-name-si" required class="w-full px-4 py-3 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="e.g., පැන්ට්‍රි කබඩ්">
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition transform active:scale-95">
+                            Save Division Structure
+                        </button>
+                    </form>
+                </div>
+
+                <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 overflow-x-auto">
+                    <h3 class="font-bold text-base mb-6">Configured Structures</h3>
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-100 dark:border-slate-700 text-slate-400 font-bold">
+                                <th class="pb-3 px-2">ID/Slug</th>
+                                <th class="pb-3 px-2">English Display</th>
+                                <th class="pb-3 px-2">Sinhala Display</th>
+                                <th class="pb-3 text-right px-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categories-table-body">
+                            <tr>
+                                <td colspan="4" class="py-4 text-center text-slate-400">Loading structures cleanly...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-products" class="tab-content space-y-8">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-extrabold">Product Specifications Inventory</h2>
+                <p class="text-xs text-slate-400 mt-1">Control visibility, tracking descriptions, and stock statuses completely</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 h-fit">
+                    <h3 class="font-bold text-base mb-6">Publish / Edit Specification</h3>
+                    <form id="product-form" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-2">Target Filter Category</label>
+                            <select id="prod-category" required class="w-full px-4 py-3 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                                <option value="">Select Division...</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 mb-1">Title (EN)</label>
+                                <input type="text" id="prod-title-en" required class="w-full px-4 py-3 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Pantry Unit">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 mb-1">Title (සිංහල)</label>
+                                <input type="text" id="prod-title-si" required class="w-full px-4 py-3 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="පැන්ට්‍රි කබඩ්">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-2">Technical Description (EN)</label>
+                            <textarea id="prod-desc-en" rows="2" required class="w-full px-4 py-3 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none" placeholder="Specifications..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-2">Technical Description (සිංහල)</label>
+                            <textarea id="prod-desc-si" rows="2" required class="w-full px-4 py-3 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none" placeholder="නිෂ්පාදන විස්තරය..."></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 mb-1">Inventory Status</label>
+                                <select id="prod-status" required class="w-full px-4 py-3 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-none outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                                    <option value="available">Available</option>
+                                    <option value="instock">In Stock</option>
+                                    <option value="outofstock">Out Of Stock</option>
+                                    <option value="hidden">Hidden/Archived</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 mb-1">Product Media</label>
+                                <input type="file" id="prod-file" class="w-full text-xs text-slate-400 file:mr-2 file:py-2.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-600 dark:file:bg-slate-700 dark:file:text-slate-200 cursor-pointer">
+                            </div>
+                        </div>
+                        
+                        <div id="upload-status" class="hidden text-[11px] font-bold text-indigo-600 dark:text-indigo-400 animate-pulse">Uploading Media via ImgBB API Securely...</div>
+
+                        <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition transform active:scale-95">
+                            Commit Specifications Entry
+                        </button>
+                    </form>
+                </div>
+
+                <div class="lg:col-span-2 space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+                    <h3 class="font-bold text-base">Active Live Specifications Inventory</h3>
+                    <div id="products-admin-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <p class="text-slate-400 text-xs py-4 col-span-full text-center">Fetching live telemetry data records cleanly...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Toggle Theme Action
+        document.getElementById('theme-btn')?.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Tab Switching Logic Configuration
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-indigo-50', 'text-indigo-600', 'dark:bg-indigo-950/50', 'dark:text-indigo-400');
+                el.classList.add('text-slate-500', 'dark:text-slate-400');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            const targetBtn = document.getElementById(`btn-${tabId}`);
+            targetBtn.classList.add('bg-indigo-50', 'text-indigo-600', 'dark:bg-indigo-950/50', 'dark:text-indigo-400');
+            targetBtn.classList.remove('text-slate-500', 'dark:text-slate-400');
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, onSnapshot, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+        // Firebase Config Grounding
+        const firebaseConfig = {
+            apiKey: "AIzaSyCG2y9r42U45v8x9uGVjv9u8DUU7VFoWnI",
+            authDomain: "daham-enterprice.firebaseapp.com",
+            projectId: "daham-enterprice",
+            storageBucket: "daham-enterprice.firebasestorage.app",
+            messagingSenderId: "554395892614",
+            appId: "1:554395892614:web:d454a239debb9e55c54a07"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        // ImgBB API Key
+        const IMGBB_API_KEY = "9c93ed5e2039d42101839bfc7740b6dc";
+
+        let activeCategories = [];
+        let activeProducts = [];
+
+        function syncMetrics() {
+            const statsRef = doc(db, "stats", "visitors");
+            getDoc(statsRef).then((snapshot) => {
+                if(snapshot.exists()) {
+                    document.getElementById('stat-visitors').innerText = snapshot.data().count || 0;
+                }
+            });
+
+            document.getElementById('stat-categories').innerText = activeCategories.length;
+            document.getElementById('stat-products').innerText = activeProducts.length;
+            
+            const outOfStockCount = activeProducts.filter(p => p.status === 'outofstock').length;
+            document.getElementById('stat-stockout').innerText = outOfStockCount;
+        }
+
+        // Listen for Categories Snapshot
+        onSnapshot(collection(db, "categories"), (snapshot) => {
+            activeCategories = [];
+            let tableHTML = '';
+            let dropdownHTML = '<option value="">Select Division...</option>';
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                activeCategories.push({ docId: doc.id, ...data });
+                
+                tableHTML += `
+                <tr class="border-b border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300">
+                    <td class="py-3.5 px-2 font-mono text-indigo-500 font-bold">${data.id}</td>
+                    <td class="py-3.5 px-2 font-medium">${data.nameEn}</td>
+                    <td class="py-3.5 px-2">${data.nameSi}</td>
+                    <td class="py-3.5 text-right px-2">
+                        <button onclick="window.removeCategory('${doc.id}')" class="text-rose-500 hover:underline font-bold text-[11px]">Delete</button>
+                    </td>
+                </tr>`;
+
+                dropdownHTML += `<option value="${data.id}">${data.nameEn} (${data.nameSi})</option>`;
+            });
+
+            document.getElementById('categories-table-body').innerHTML = tableHTML || '<tr><td colspan="4" class="py-4 text-center text-slate-400">No category divisions structured yet.</td></tr>';
+            document.getElementById('prod-category').innerHTML = dropdownHTML;
+            syncMetrics();
+        });
+
+        // Listen for Products Inventory Snapshot 
+        onSnapshot(collection(db, "products"), (snapshot) => {
+            activeProducts = [];
+            let listHTML = '';
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                activeProducts.push({ docId: doc.id, ...data });
+
+                let statusBadge = '';
+                if(data.status === 'instock') statusBadge = '<span class="px-2.5 py-1 text-[10px] rounded-full font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400">In Stock</span>';
+                else if(data.status === 'available') statusBadge = '<span class="px-2.5 py-1 text-[10px] rounded-full font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-400">Available</span>';
+                else if(data.status === 'outofstock') statusBadge = '<span class="px-2.5 py-1 text-[10px] rounded-full font-bold bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-400">Out of Stock</span>';
+                else statusBadge = '<span class="px-2.5 py-1 text-[10px] rounded-full font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400">Hidden</span>';
+
+                listHTML += `
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex gap-4 items-center">
+                    <img src="${data.image || 'https://via.placeholder.com/150'}" class="w-16 h-16 rounded-2xl object-cover bg-slate-50 shrink-0" alt="Thumbnail">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h4 class="font-bold text-sm truncate">${data.titleEn}</h4>
+                            ${statusBadge}
+                        </div>
+                        <p class="text-[11px] text-slate-400 font-mono truncate">Category: ${data.categoryId}</p>
+                        <div class="flex gap-3 mt-2 text-[11px] font-bold">
+                            <button onclick="window.updateStatus('${doc.id}', 'outofstock')" class="text-amber-500 hover:underline">Out of Stock</button>
+                            <button onclick="window.updateStatus('${doc.id}', 'instock')" class="text-emerald-500 hover:underline">In Stock</button>
+                            <button onclick="window.removeProduct('${doc.id}')" class="text-rose-500 hover:underline ml-auto">Delete</button>
+                        </div>
+                    </div>
+                </div>`;
+            });
+
+            document.getElementById('products-admin-list').innerHTML = listHTML || '<p class="text-slate-400 text-xs py-4 col-span-full text-center">No specification entries published.</p>';
+            syncMetrics();
+        });
+
+        // ImgBB Upload Sequence
+        async function uploadToImgBB(fileField) {
+            const file = fileField.files[0];
+            if (!file) return null;
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) throw new Error("ImgBB Upload failure");
+            const resData = await response.json();
+            return resData.data.url;
+        }
+
+        // Commit Category Action
+        document.getElementById('category-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('cat-id').value.trim().toLowerCase();
+            const nameEn = document.getElementById('cat-name-en').value.trim();
+            const nameSi = document.getElementById('cat-name-si').value.trim();
+
+            try {
+                await setDoc(doc(db, "categories", id), { id, nameEn, nameSi });
+                document.getElementById('category-form').reset();
+            } catch (err) {
+                alert("Error writing category: " + err.message);
+            }
+        });
+
+        // Commit Product Entry Action Specification
+        document.getElementById('product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const indicator = document.getElementById('upload-status');
+            indicator.classList.remove('hidden');
+
+            const categoryId = document.getElementById('prod-category').value;
+            const titleEn = document.getElementById('prod-title-en').value.trim();
+            const titleSi = document.getElementById('prod-title-si').value.trim();
+            const descEn = document.getElementById('prod-desc-en').value.trim();
+            const descSi = document.getElementById('prod-desc-si').value.trim();
+            const status = document.getElementById('prod-status').value;
+            const fileField = document.getElementById('prod-file');
+
+            try {
+                let imageUrl = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80";
+                const uploadedUrl = await uploadToImgBB(fileField);
+                if (uploadedUrl) imageUrl = uploadedUrl;
+
+                const customDocId = "prod_" + Date.now();
+                await setDoc(doc(db, "products", customDocId), {
+                    categoryId, titleEn, titleSi, descEn, descSi, status, image: imageUrl
+                });
+
+                document.getElementById('product-form').reset();
+            } catch (err) {
+                alert("Error saving product: " + err.message);
+            } finally {
+                indicator.classList.add('hidden');
+            }
+        });
+
+        // Global Operations Exposure Mapping
+        window.removeCategory = async (id) => {
+            if(confirm("Confirm removal of this category structure?")) {
+                await deleteDoc(doc(db, "categories", id));
+            }
+        };
+
+        window.removeProduct = async (id) => {
+            if(confirm("Permanently delete this product entry?")) {
+                await deleteDoc(doc(db, "products", id));
+            }
+        };
+
+        window.updateStatus = async (id, newStatus) => {
+            await updateDoc(doc(db, "products", id), { status: newStatus });
+        };
+    </script>
+</body>
+</html>
